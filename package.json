@@ -1,0 +1,18 @@
+{
+  "name": "foreca_weather_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "node server/index.ts"
+  },
+  "proxy": "http://localhost:3001",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^17.0.18",
+    "express": "^4.17.3"
+  }
+}

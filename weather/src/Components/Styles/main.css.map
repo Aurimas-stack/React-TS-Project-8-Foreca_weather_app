@@ -1,0 +1,11 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "main.scss",
+        "../App/App.scss",
+        "../App/Input/Input.scss"
+    ],
+    "names": [],
+    "file": "main.css"
+}
