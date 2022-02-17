@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import { DataLocationProps } from "../../utils/types";
 
-import "./LocationList.css";
+import "./LocationList.scss";
 
 interface LocationListProps {
   data: DataLocationProps[];
@@ -24,6 +24,7 @@ const LocationList: FC<LocationListProps> = ({
             {location.name}, {location.adminArea}, {location.country}
             <div className="getWeatherBtn_cont">
               <button
+                className="btn"
                 onClick={() => {
                   onLocationWeather(location.id, "current");
                   setWeatherType("current");
@@ -32,6 +33,7 @@ const LocationList: FC<LocationListProps> = ({
                 Get current weather
               </button>
               <button
+                className="btn"
                 onClick={() => {
                   onLocationWeather(location.id, "future");
                   setWeatherType("future");

@@ -1,5 +1,7 @@
 import {FC} from "react";
 
+import "./ErrorBlock.scss";
+
 interface ErrorBlockProps {
     word:string;
 }
@@ -7,7 +9,7 @@ interface ErrorBlockProps {
 const ErrorBlock: FC<ErrorBlockProps> = ({word}): JSX.Element | null => {
     if(!word) return null;
 
-    return <div>{word}</div>
+    return <div className="error_cont">Error: {word}</div>
 }
 
 export default ErrorBlock;

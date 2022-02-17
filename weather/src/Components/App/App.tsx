@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Input from "./Input/Input";
 import LocationList from "../LocationList/LocationList";
@@ -12,7 +12,7 @@ import {
   FutureWeatherProps,
 } from "../../utils/types";
 
-
+import "./App.scss";
 
 function App() {
   const [error, setError] = useState<string>("");
@@ -23,10 +23,23 @@ function App() {
   const [weather, setWeather] = useState<WeatherProps>();
   const [futureWeather, setFutureWeather] = useState<FutureWeatherProps[]>();
 
-  const handleLocation = async (): Promise<void> => {
+  const handleLocation = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault();
+
+    if(searchLocation.length === 0) {
+      setError("Type in a location");
+      return;
+    }
+    if(searchLocation.length > 30) {
+      setError("Your location is too long");
+      return
+    }
+
+    setLoading(true);
+
     try {
       const response: Response = await fetch(
-        `https://foreca-weather.p.rapidapi.com/location/search/${searchLocation}?`,
+        `https://foreca-weather.p.rapidapi.com/location/search/${searchLocation.toLocaleLowerCase()}?`,
         {
           method: "GET",
           headers: {
@@ -36,6 +49,9 @@ function App() {
         }
       );
       const data = await response.json();
+      if(!data) {
+        setError("Your location doesn't exist.")
+      }
       setData(data.locations);
     } catch (error) {
       if (typeof error === "string") {
@@ -44,6 +60,9 @@ function App() {
         setError(error.message);
       }
     }
+
+    setLoading(false);
+
   };
 
   const handleLocationWeather = async (
@@ -63,7 +82,7 @@ function App() {
         },
       });
       const data = await response.json();
-      weatherType === "current"
+      urlType === "current"
         ? setWeather(data.current)
         : setFutureWeather(data.forecast);
     } catch (error) {
@@ -74,6 +93,9 @@ function App() {
       }
     }
   };
+
+  useEffect(() => {
+  }, [data])
 
   return (
     <div className="App">

@@ -1,6 +1,8 @@
 import { FutureWeatherProps } from "../../utils/types";
 import { FC } from "react";
 
+import "./SelectedLocation.scss";
+
 interface SelLocFutProps {
   futureWeather: FutureWeatherProps[];
 }
@@ -10,7 +12,7 @@ const SelectedLocationFuture: FC<SelLocFutProps> = ({ futureWeather }) => {
     <div>
       {futureWeather.map((weathers, index) => {
         return (
-          <ul key={index}>
+          <ul key={index} className="selectedList_cont">
             <li>Date: {weathers.date},</li>
             <li>Description: {weathers.symbolPhrase},</li>
             <li>cloudiness: {weathers.cloudiness},</li>
