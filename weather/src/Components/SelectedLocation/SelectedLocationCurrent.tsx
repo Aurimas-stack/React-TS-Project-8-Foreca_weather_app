@@ -1,22 +1,34 @@
-import { WeatherProps } from "../../utils/types";
 import { FC } from "react";
 
-import "./SelectedLocation.scss";
+import { Action, InitialState } from "../App/Reducer/AppReducer";
 
 interface SelectedLocationProps {
-  weather: WeatherProps;
+  state: InitialState;
+  dispatch: React.Dispatch<Action>;
 }
 
 const SelectedLocationCurrent: FC<SelectedLocationProps> = ({
-  weather,
-}): JSX.Element => {
+  state,
+  dispatch,
+}): JSX.Element | null => {
+  if (state.currentWeather.length === 0) return null;
+
   return (
-    <ul className="selectedList_cont"> 
-      <li>{weather.temperature} Celsius</li>
-      <li>cloudiness: {weather.cloudiness},</li>
-      <li>humidity: {weather.relHumidity},</li>
-      <li>windSpeed: {weather.windSpeed} m/s,</li>
-      <li>UV index: {weather.uvIndex}</li>
+    <ul className="selectedList_cont current_weather">
+      <li>{state.currentWeather[0].temperature} Celsius</li>
+      <li>cloudiness: {state.currentWeather[0].cloudiness},</li>
+      <li>humidity: {state.currentWeather[0].relHumidity},</li>
+      <li>windSpeed: {state.currentWeather[0].windSpeed} m/s,</li>
+      <li>UV index: {state.currentWeather[0].uvIndex}</li>*
+      <button
+        className="btn"
+        onClick={() => {
+          dispatch({ type: "showCurrentWeather", value: false });
+          dispatch({ type: "showLocationList", value: true });
+        }}
+      >
+        Close
+      </button>
     </ul>
   );
 };

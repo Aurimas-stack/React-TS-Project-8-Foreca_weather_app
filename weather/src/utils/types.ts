@@ -1,4 +1,4 @@
-export interface DataLocationProps {
+export interface LocationProps {
   adminArea: string;
   country: string;
   id: number;

@@ -1,21 +1,23 @@
 import { FC } from "react";
 
-import { DataLocationProps } from "../../utils/types";
-
-import "./LocationList.scss";
+import { Action, InitialState } from "../App/Reducer/AppReducer";
 
 interface LocationListProps {
-  data: DataLocationProps[];
+  state: InitialState;
+  dispatch: React.Dispatch<Action>;
   onLocationWeather: (id: number, urlType: string) => Promise<void>;
-  setWeatherType: (e: string) => void;
 }
 
 const LocationList: FC<LocationListProps> = ({
-  data,
+  state,
   onLocationWeather,
-  setWeatherType,
-}): JSX.Element => {
-  const locations = data.length > 5 ? data.slice(0, 5) : data;
+
+  dispatch,
+}): JSX.Element | null => {
+  if (state.location.length === 0) return null;
+
+  const locations =
+    state.location.length > 5 ? state.location.slice(0, 5) : state.location;
   return (
     <ul className="list_container">
       {locations.map((location, index) => {
@@ -27,7 +29,8 @@ const LocationList: FC<LocationListProps> = ({
                 className="btn"
                 onClick={() => {
                   onLocationWeather(location.id, "current");
-                  setWeatherType("current");
+                  dispatch({ type: "showLocationList", value: false });
+                  dispatch({ type: "showCurrentWeather", value: true });
                 }}
               >
                 Get current weather
@@ -36,7 +39,8 @@ const LocationList: FC<LocationListProps> = ({
                 className="btn"
                 onClick={() => {
                   onLocationWeather(location.id, "future");
-                  setWeatherType("future");
+                  dispatch({ type: "showLocationList", value: false });
+                  dispatch({ type: "showFutureWeather", value: true });
                 }}
               >
                 Get 7 day weather

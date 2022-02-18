@@ -1,0 +1,29 @@
+@import "./_variables";
+@import "./__mixins";
+
+
+@import "../App/App.scss";
+@import "../App/ErrorBlock/ErrorBlock.scss";
+@import "../App/Input/Input.scss";
+@import "../App/loader/Loader.scss";
+@import "../LocationList/LocationList.scss";
+@import "../SelectedLocation/SelectedLocation.scss";
+
+
+.btn {
+    border: none;
+    border-radius: 10px;
+    padding: 8px;
+    margin-top: 10px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    background-color: $green;
+    color: #fff;
+
+    &:hover {
+        cursor: pointer;
+        background-color: rgb(214, 20, 20);
+    }
+
+}

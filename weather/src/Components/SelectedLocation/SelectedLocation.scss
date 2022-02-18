@@ -1,6 +1,67 @@
 .selectedList_cont {
-    background-color: #fff;
+    background-color: $white;
     list-style-type: none;
-    padding:10px;
+    padding: 10px;
     border-radius: 10px;
+
+}
+
+.current_weather {
+    margin-top: 30px;
+    max-width: 200px;
+
+    li {
+        margin: 10px 0;
+        font-size: 1.2rem;
+
+    }
+
+    .btn {
+        font-weight: 400;
+    }
+}
+
+.future_weather_container {
+    @include flex-center;
+    margin-top: 50px;
+
+    .future_weather_table,
+    th,
+    td {
+        border: 1px solid $black;
+        border-collapse: collapse;
+
+        th,
+        td {
+            text-align: center;
+            padding: 5px;
+        }
+
+        th {
+            background-color: $white;
+        }
+    }
+
+    .btn {
+        font-weight: 400;
+    }
+}
+
+@media screen and (max-width: 555px) {
+    .future_weather_table {
+        font-size: 0.8rem;
+        padding: 2px;
+
+        th,
+        td {
+            padding: 2px;
+        }
+    }
+}
+
+@media screen and (max-width: 455px) {
+    .future_weather_table {
+        font-size: 0.6rem;
+        padding: 0px;
+    }
 }

@@ -1,36 +1,47 @@
 .input_cont {
-    display: flex;
-    flex-direction: column;
-    margin-top:200px;
-    align-items: center;
-    width:85%;
+    @include flex-center;
+    margin-top: 150px;
+    width: 85%;
+
     .main_input {
-        padding:15px;
+        padding: 15px;
         border-radius: 10px;
-        border:none;
-        width:55%;
-        font-size:1rem;
+        border: none;
+        width: 55%;
+        font-size: 1rem;
+
         &:focus {
             outline: none;
         }
+
         &::placeholder {
-            color:#000;
+            color: $black;
             letter-spacing: 1px;
         }
     }
+
     .btn {
-        border:none;
-        border-radius: 10px;
-        padding:10px;
-        margin-top:10px;
         font-weight: 600;
-        letter-spacing: 1px;
-        font-size: 1rem;
-        background-color: rgb(25, 122, 12);
-        color:#fff;
-        &:hover {
-            cursor:pointer;
-            opacity: 0.9;
+    }
+}
+
+@media screen and (max-width: 525px) {
+    .main_input {
+        font-size: 0.8rem;
+
+        &::placeholder {
+            letter-spacing: 0px;
+            font-size: 0.8rem;
+        }
+    }
+}
+
+@media screen and (max-width: 445px) {
+    .main_input {
+        font-size: 0.7rem;
+
+        &::placeholder {
+            font-size: 0.7rem;
         }
     }
 }

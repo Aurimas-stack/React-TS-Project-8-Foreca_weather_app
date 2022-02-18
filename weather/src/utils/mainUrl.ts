@@ -1,0 +1,1 @@
+export const mainUrl: string =  "https://foreca-weather.p.rapidapi.com/";

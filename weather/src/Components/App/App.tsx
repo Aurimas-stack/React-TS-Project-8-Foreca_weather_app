@@ -1,45 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { useReducer } from "react";
 
+import { appReducer, defaultState } from "./Reducer/AppReducer";
+
+import Loader from "./loader/Loader";
 import Input from "./Input/Input";
 import LocationList from "../LocationList/LocationList";
 import SelectedLocationCurrent from "../SelectedLocation/SelectedLocationCurrent";
 import SelectedLocationFuture from "../SelectedLocation/SelectedLocationFuture";
 
 import { apiKey } from "../../utils/Api";
-import {
-  DataLocationProps,
-  WeatherProps,
-  FutureWeatherProps,
-} from "../../utils/types";
+import { mainUrl } from "../../utils/mainUrl";
+import { getError } from "../../utils/getError";
+import { checkLocationString } from "../../utils/locationRegex";
 
-import "./App.scss";
+import "./../Styles/styles.scss";
 
 function App() {
-  const [error, setError] = useState<string>("");
-  const [searchLocation, setSearchLocation] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<DataLocationProps[]>([]);
-  const [weatherType, setWeatherType] = useState<string>("");
-  const [weather, setWeather] = useState<WeatherProps>();
-  const [futureWeather, setFutureWeather] = useState<FutureWeatherProps[]>();
+  const [state, dispatch] = useReducer(appReducer, defaultState);
 
   const handleLocation = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
+    dispatch({ type: "defaultState", value: defaultState });
 
-    if(searchLocation.length === 0) {
-      setError("Type in a location");
+    if (state.searchLocation.length === 0) {
+      dispatch({ type: "error", value: "Type in a location." });
       return;
     }
-    if(searchLocation.length > 30) {
-      setError("Your location is too long");
-      return
+    if (state.searchLocation.length > 30) {
+      dispatch({ type: "error", value: "Your location name is too long." });
+      return;
+    }
+    if (!checkLocationString(state.searchLocation)) {
+      dispatch({
+        type: "error",
+        value: "Only letters and spaces are allowed.",
+      });
+      return;
     }
 
-    setLoading(true);
+    dispatch({ type: "showLoading", value: true });
 
     try {
       const response: Response = await fetch(
-        `https://foreca-weather.p.rapidapi.com/location/search/${searchLocation.toLocaleLowerCase()}?`,
+        `${mainUrl}location/search/${state.searchLocation.toLocaleLowerCase()}?`,
         {
           method: "GET",
           headers: {
@@ -49,28 +52,24 @@ function App() {
         }
       );
       const data = await response.json();
-      if(!data) {
-        setError("Your location doesn't exist.")
+      if (data.locations.length === 0) {
+        dispatch({ type: "error", value: "Your location doesn't exist." });
       }
-      setData(data.locations);
+      dispatch({ type: "location", value: data.locations });
+      dispatch({ type: "showLocationList", value: true });
     } catch (error) {
-      if (typeof error === "string") {
-        setError(error);
-      } else if (error instanceof Error) {
-        setError(error.message);
-      }
+      dispatch({ type: "error", value: getError(error) });
     }
 
-    setLoading(false);
-
+    dispatch({ type: "showLoading", value: false });
   };
 
   const handleLocationWeather = async (
     id: number,
     urlType: string
   ): Promise<void> => {
-    const currentUrl = `https://foreca-weather.p.rapidapi.com/current/${id}?alt=0&tempunit=C&windunit=MS&tz=Europe`;
-    const futureUrl = `https://foreca-weather.p.rapidapi.com/forecast/daily/${id}?alt=0&tempunit=C&windunit=MS&periods=8&dataset=full`;
+    const currentUrl = `${mainUrl}current/${id}?alt=0&tempunit=C&windunit=MS&tz=Europe`;
+    const futureUrl = `${mainUrl}forecast/daily/${id}?alt=0&tempunit=C&windunit=MS&periods=8&dataset=full`;
     const url = urlType === "current" ? currentUrl : futureUrl;
 
     try {
@@ -83,41 +82,34 @@ function App() {
       });
       const data = await response.json();
       urlType === "current"
-        ? setWeather(data.current)
-        : setFutureWeather(data.forecast);
+        ? dispatch({ type: "currentWeather", value: [data.current] })
+        : dispatch({ type: "futureWeather", value: data.forecast });
     } catch (error) {
-      if (typeof error === "string") {
-        setError(error);
-      } else if (error instanceof Error) {
-        setError(error.message);
-      }
+      dispatch({ type: "error", value: getError(error) });
     }
   };
 
-  useEffect(() => {
-  }, [data])
-
   return (
     <div className="App">
-      <Input
-        error={error}
-        searchLocation={searchLocation}
-        setError={setError}
-        setSearchLocation={setSearchLocation}
-        onLocation={handleLocation}
-      />
-      {data.length > 0 && (
-        <LocationList
-          data={data}
-          onLocationWeather={handleLocationWeather}
-          setWeatherType={setWeatherType}
-        />
-      )}
-      {weather !== undefined && weatherType === "current" && (
-        <SelectedLocationCurrent weather={weather} />
-      )}
-      {futureWeather !== undefined && weatherType === "future" && (
-        <SelectedLocationFuture futureWeather={futureWeather} />
+      <Input onLocation={handleLocation} state={state} dispatch={dispatch} />
+      {state.loading === true ? (
+        <Loader />
+      ) : (
+        <>
+          {state.showLocationList && (
+            <LocationList
+              state={state}
+              dispatch={dispatch}
+              onLocationWeather={handleLocationWeather}
+            />
+          )}
+          {state.showCurrentWeather && (
+            <SelectedLocationCurrent state={state} dispatch={dispatch} />
+          )}
+          {state.showFutureWeather && (
+            <SelectedLocationFuture state={state} dispatch={dispatch} />
+          )}
+        </>
       )}
     </div>
   );
