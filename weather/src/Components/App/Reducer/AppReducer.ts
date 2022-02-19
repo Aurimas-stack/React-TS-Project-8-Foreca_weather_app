@@ -7,6 +7,10 @@ import {
 } from "../../../utils/types";
 
 export type Action =
+  | { type: "defaultState" }
+  | { type: "nextListPage" }
+  | { type: "previousListPage" }
+  | { type: "selectListPage"; value: number }
   | { type: "searchLocation"; value: string }
   | { type: "error"; value: string }
   | { type: "showLoading"; value: boolean }
@@ -15,11 +19,11 @@ export type Action =
   | { type: "showFutureWeather"; value: boolean }
   | { type: "location"; value: LocationProps[] }
   | { type: "futureWeather"; value: FutureWeatherProps[] }
-  | { type: "currentWeather"; value: WeatherProps[] }
-  | { type: "defaultState"; value: InitialState };
+  | { type: "currentWeather"; value: WeatherProps[] };
 
 export interface InitialState {
   searchLocation: string;
+  locationListPageNumber: number;
   error: string;
   loading: boolean;
   showCurrentWeather: boolean;
@@ -32,6 +36,7 @@ export interface InitialState {
 
 export const defaultState: InitialState = {
   searchLocation: "",
+  locationListPageNumber: 1,
   error: "",
   loading: false,
   showCurrentWeather: false,
@@ -49,6 +54,18 @@ export const appReducer: React.Reducer<InitialState, Action> = (
   switch (action.type) {
     case "searchLocation":
       return { ...state, searchLocation: action.value };
+    case "nextListPage":
+      return {
+        ...state,
+        locationListPageNumber: state.locationListPageNumber + 1,
+      };
+    case "previousListPage":
+      return {
+        ...state,
+        locationListPageNumber: state.locationListPageNumber - 1,
+      };
+    case "selectListPage":
+      return { ...state, locationListPageNumber: action.value };
     case "error":
       return { ...state, error: action.value };
     case "location":

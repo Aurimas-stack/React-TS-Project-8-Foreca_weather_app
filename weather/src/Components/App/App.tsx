@@ -4,14 +4,13 @@ import { appReducer, defaultState } from "./Reducer/AppReducer";
 
 import Loader from "./loader/Loader";
 import Input from "./Input/Input";
-import LocationList from "../LocationList/LocationList";
+import LocationListPagination from "../LocationList/Pagination/LocationListPagination";
 import SelectedLocationCurrent from "../SelectedLocation/SelectedLocationCurrent";
 import SelectedLocationFuture from "../SelectedLocation/SelectedLocationFuture";
 
-import { apiKey } from "../../utils/Api";
-import { mainUrl } from "../../utils/mainUrl";
 import { getError } from "../../utils/getError";
 import { checkLocationString } from "../../utils/locationRegex";
+import { locationFetch, weatherFetch } from "../../utils/getWeather";
 
 import "./../Styles/styles.scss";
 
@@ -20,7 +19,7 @@ function App() {
 
   const handleLocation = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    dispatch({ type: "defaultState", value: defaultState });
+    dispatch({ type: "defaultState"});
 
     if (state.searchLocation.length === 0) {
       dispatch({ type: "error", value: "Type in a location." });
@@ -41,16 +40,7 @@ function App() {
     dispatch({ type: "showLoading", value: true });
 
     try {
-      const response: Response = await fetch(
-        `${mainUrl}location/search/${state.searchLocation.toLocaleLowerCase()}?`,
-        {
-          method: "GET",
-          headers: {
-            "x-rapidapi-host": "foreca-weather.p.rapidapi.com",
-            "x-rapidapi-key": apiKey,
-          },
-        }
-      );
+      const response: Response = await locationFetch(state.searchLocation);
       const data = await response.json();
       if (data.locations.length === 0) {
         dispatch({ type: "error", value: "Your location doesn't exist." });
@@ -68,18 +58,8 @@ function App() {
     id: number,
     urlType: string
   ): Promise<void> => {
-    const currentUrl = `${mainUrl}current/${id}?alt=0&tempunit=C&windunit=MS&tz=Europe`;
-    const futureUrl = `${mainUrl}forecast/daily/${id}?alt=0&tempunit=C&windunit=MS&periods=8&dataset=full`;
-    const url = urlType === "current" ? currentUrl : futureUrl;
-
     try {
-      const response: Response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "x-rapidapi-host": "foreca-weather.p.rapidapi.com",
-          "x-rapidapi-key": apiKey,
-        },
-      });
+      const response: Response = await weatherFetch(id, urlType);
       const data = await response.json();
       urlType === "current"
         ? dispatch({ type: "currentWeather", value: [data.current] })
@@ -97,10 +77,13 @@ function App() {
       ) : (
         <>
           {state.showLocationList && (
-            <LocationList
-              state={state}
+            <LocationListPagination
+              dataLimit={5}
+              pageLimit={3}
+              pageNumber={state.locationListPageNumber}
+              data={state.location}
               dispatch={dispatch}
-              onLocationWeather={handleLocationWeather}
+              handleLocationWeather={handleLocationWeather}
             />
           )}
           {state.showCurrentWeather && (

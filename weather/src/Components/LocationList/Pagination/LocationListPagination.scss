@@ -1,0 +1,76 @@
+.pagination_component {
+    @include flex-center;
+
+    .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 30px;
+
+        .prev,
+        .next {
+            background: $white;
+            border: none;
+            padding: 5px;
+            width: 80px;
+            color: $black;
+            border-radius: 8px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+
+            &:hover {
+                cursor: pointer;
+                background-color: $green;
+                color: $white;
+            }
+        }
+
+        .prev.disabled,
+        .next.disabled {
+            pointer-events: none;
+            box-shadow: none;
+            color: #999;
+        }
+
+        .paginationItem {
+            background: $white;
+            border: 2px solid #666;
+            padding: 5px;
+            border-radius: 10px;
+            height: 35px;
+            width: 35px;
+            position: relative;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .paginationItem span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .paginationItem.active {
+            border: none;
+            background-color: $green;
+            color: $white;
+            pointer-events: none;
+            font-size: 1.1rem;
+        }
+
+        .paginationItem.inactive {
+            font-size: 1rem;
+            border: none;
+            color: $black;
+        }
+
+    }
+}
+
+@media screen and (max-width:425px) {
+    .pagination {
+        margin-top:15px;
+    }
+}

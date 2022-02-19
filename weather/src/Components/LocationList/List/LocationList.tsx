@@ -1,34 +1,32 @@
 import { FC } from "react";
 
-import { Action, InitialState } from "../App/Reducer/AppReducer";
+import { Action } from "../../App/Reducer/AppReducer";
 
-interface LocationListProps {
-  state: InitialState;
+import { LocationProps } from "../../../utils/types";
+
+export interface LocationListProps {
+
   dispatch: React.Dispatch<Action>;
   onLocationWeather: (id: number, urlType: string) => Promise<void>;
+  data: LocationProps
 }
 
 const LocationList: FC<LocationListProps> = ({
-  state,
   onLocationWeather,
-
+  data,
   dispatch,
 }): JSX.Element | null => {
-  if (state.location.length === 0) return null;
+  if (data === undefined) return null;
 
-  const locations =
-    state.location.length > 5 ? state.location.slice(0, 5) : state.location;
   return (
     <ul className="list_container">
-      {locations.map((location, index) => {
-        return (
-          <li key={index} className="location">
-            {location.name}, {location.adminArea}, {location.country}
+          <li  className="location">
+            {data.name}, {data.adminArea}, {data.country}
             <div className="getWeatherBtn_cont">
               <button
                 className="btn"
                 onClick={() => {
-                  onLocationWeather(location.id, "current");
+                  onLocationWeather(data.id, "current");
                   dispatch({ type: "showLocationList", value: false });
                   dispatch({ type: "showCurrentWeather", value: true });
                 }}
@@ -38,7 +36,7 @@ const LocationList: FC<LocationListProps> = ({
               <button
                 className="btn"
                 onClick={() => {
-                  onLocationWeather(location.id, "future");
+                  onLocationWeather(data.id, "future");
                   dispatch({ type: "showLocationList", value: false });
                   dispatch({ type: "showFutureWeather", value: true });
                 }}
@@ -47,8 +45,6 @@ const LocationList: FC<LocationListProps> = ({
               </button>
             </div>
           </li>
-        );
-      })}
     </ul>
   );
 };
