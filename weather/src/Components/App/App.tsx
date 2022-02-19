@@ -11,6 +11,7 @@ import SelectedLocationFuture from "../SelectedLocation/SelectedLocationFuture";
 import { getError } from "../../utils/getError";
 import { checkLocationString } from "../../utils/locationRegex";
 import { locationFetch, weatherFetch } from "../../utils/getWeather";
+import { postLocation, postCurrentWeather  } from "../../utils/postToServer";
 
 import "./../Styles/styles.scss";
 
@@ -50,6 +51,7 @@ function App() {
       }
 
       dispatch({ type: "location", value: data.locations });
+      await postLocation(state.searchLocation);
       dispatch({ type: "showLocationList", value: true });
 
     } catch (error) {
@@ -61,14 +63,20 @@ function App() {
 
   const handleLocationWeather = async (
     id: number,
-    urlType: string
+    urlType: string,
+    name?: string
   ): Promise<void> => {
     try {
       const response: Response = await weatherFetch(id, urlType);
       const data = await response.json();
+
+      await postCurrentWeather(name, data.current)
+
       urlType === "current"
         ? dispatch({ type: "currentWeather", value: [data.current] })
         : dispatch({ type: "futureWeather", value: data.forecast });
+
+
     } catch (error) {
       dispatch({ type: "error", value: getError(error) });
     }

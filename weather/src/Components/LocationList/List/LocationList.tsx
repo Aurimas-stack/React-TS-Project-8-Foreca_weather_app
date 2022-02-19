@@ -6,7 +6,7 @@ import { LocationProps } from "../../../utils/types";
 
 export interface LocationListProps {
   dispatch: React.Dispatch<Action>;
-  onLocationWeather: (id: number, urlType: string) => Promise<void>;
+  onLocationWeather: (id: number, urlType: string, name?: string) => Promise<void>;
   data: LocationProps;
 }
 
@@ -25,7 +25,7 @@ const LocationList: FC<LocationListProps> = ({
           <button
             className="btn"
             onClick={() => {
-              onLocationWeather(data.id, "current");
+              onLocationWeather(data.id, "current", data.name);
               dispatch({ type: "showLocationList", value: false });
               dispatch({ type: "showCurrentWeather", value: true });
             }}

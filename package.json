@@ -6,11 +6,12 @@
   "scripts": {
     "start": "node server/index.ts"
   },
-  "proxy": "http://localhost:3001",
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "body-parser": "^1.19.2"
+  },
   "devDependencies": {
     "@types/node": "^17.0.18",
     "express": "^4.17.3"

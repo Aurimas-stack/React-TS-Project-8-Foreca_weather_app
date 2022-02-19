@@ -19,15 +19,14 @@ const SelectedLocationCurrent: FC<SelectedLocationProps> = ({
       <li>cloudiness: {state.currentWeather[0].cloudiness},</li>
       <li>humidity: {state.currentWeather[0].relHumidity},</li>
       <li>windSpeed: {state.currentWeather[0].windSpeed} m/s,</li>
-      <li>UV index: {state.currentWeather[0].uvIndex}</li>*
+      <li>UV index: {state.currentWeather[0].uvIndex}</li>
       <button
         className="btn"
         onClick={() => {
           dispatch({ type: "showCurrentWeather", value: false });
           dispatch({ type: "showLocationList", value: true });
         }}
-      >
-        Close
+      >Close
       </button>
     </ul>
   );
