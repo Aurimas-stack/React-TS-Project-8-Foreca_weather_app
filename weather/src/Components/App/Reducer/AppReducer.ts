@@ -50,7 +50,7 @@ export const defaultState: InitialState = {
 export const appReducer: React.Reducer<InitialState, Action> = (
   state: InitialState,
   action: Action
-) => {
+): InitialState => {
   switch (action.type) {
     case "searchLocation":
       return { ...state, searchLocation: action.value };

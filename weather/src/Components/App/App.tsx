@@ -19,7 +19,7 @@ function App() {
 
   const handleLocation = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    dispatch({ type: "defaultState"});
+    dispatch({ type: "defaultState" });
 
     if (state.searchLocation.length === 0) {
       dispatch({ type: "error", value: "Type in a location." });
@@ -42,11 +42,16 @@ function App() {
     try {
       const response: Response = await locationFetch(state.searchLocation);
       const data = await response.json();
+
       if (data.locations.length === 0) {
         dispatch({ type: "error", value: "Your location doesn't exist." });
+        dispatch({ type: "showLoading", value: false });
+        return;
       }
+
       dispatch({ type: "location", value: data.locations });
       dispatch({ type: "showLocationList", value: true });
+
     } catch (error) {
       dispatch({ type: "error", value: getError(error) });
     }

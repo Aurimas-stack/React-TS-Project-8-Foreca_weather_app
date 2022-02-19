@@ -6,6 +6,7 @@ import { Action } from "../../App/Reducer/AppReducer";
 import { getPaginationGroupArray } from "../../../utils/getPaginationArr";
 
 import { LocationProps } from "../../../utils/types";
+import { JsxEmit } from "typescript";
 
 interface LocationListPaginationProps {
   pageLimit: number;
@@ -23,7 +24,7 @@ export const LocationListPagination: FC<LocationListPaginationProps> = ({
   data,
   dispatch,
   handleLocationWeather,
-}) => {
+}): JSX.Element => {
   let totalPageCount: number = Math.ceil(data.length / dataLimit);
 
   const handleNextPage = () => {
@@ -60,7 +61,7 @@ export const LocationListPagination: FC<LocationListPaginationProps> = ({
   };
 
   const getPaginationGroup = (): number[] => {
-    const paginationNumberArray = getPaginationGroupArray(
+    const paginationNumberArray: number[] = getPaginationGroupArray(
       pageNumber,
       pageLimit
     );
