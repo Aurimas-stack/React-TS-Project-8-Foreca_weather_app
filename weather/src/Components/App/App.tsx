@@ -9,9 +9,12 @@ import SelectedLocationCurrent from "../SelectedLocation/SelectedLocationCurrent
 import SelectedLocationFuture from "../SelectedLocation/SelectedLocationFuture";
 
 import { getError } from "../../utils/getError";
-import { checkLocationString } from "../../utils/locationRegex";
+import { validateInput } from "../../utils/validateInput";
 import { locationFetch, weatherFetch } from "../../utils/getWeather";
-import { postLocation, postCurrentWeather  } from "../../utils/postToServer";
+import {
+  postSearchedLocation,
+  postSearchedCurrentWeather,
+} from "../../utils/postToServer";
 
 import "./../Styles/styles.scss";
 
@@ -19,22 +22,16 @@ function App() {
   const [state, dispatch] = useReducer(appReducer, defaultState);
 
   const handleLocation = async (e: React.FormEvent): Promise<void> => {
+    let inputValidation: { error: string; value: boolean };
     e.preventDefault();
     dispatch({ type: "defaultState" });
 
-    if (state.searchLocation.length === 0) {
-      dispatch({ type: "error", value: "Type in a location." });
-      return;
-    }
-    if (state.searchLocation.length > 30) {
-      dispatch({ type: "error", value: "Your location name is too long." });
-      return;
-    }
-    if (!checkLocationString(state.searchLocation)) {
-      dispatch({
-        type: "error",
-        value: "Only letters and spaces are allowed.",
-      });
+    inputValidation = validateInput(state.searchLocation);
+
+    postSearchedLocation(state.searchLocation);
+
+    if (inputValidation.value === true) {
+      dispatch({ type: "error", value: inputValidation.error });
       return;
     }
 
@@ -51,9 +48,7 @@ function App() {
       }
 
       dispatch({ type: "location", value: data.locations });
-      await postLocation(state.searchLocation);
       dispatch({ type: "showLocationList", value: true });
-
     } catch (error) {
       dispatch({ type: "error", value: getError(error) });
     }
@@ -70,13 +65,16 @@ function App() {
       const response: Response = await weatherFetch(id, urlType);
       const data = await response.json();
 
-      await postCurrentWeather(name, data.current)
+      if (data === undefined) {
+        dispatch({ type: "error", value: "Couldn't find weather!" });
+        return;
+      }
+
+      postSearchedCurrentWeather(name, data.current);
 
       urlType === "current"
         ? dispatch({ type: "currentWeather", value: [data.current] })
         : dispatch({ type: "futureWeather", value: data.forecast });
-
-
     } catch (error) {
       dispatch({ type: "error", value: getError(error) });
     }

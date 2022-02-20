@@ -1,7 +1,7 @@
 import { WeatherProps } from "./types";
 
-export const postLocation = (item: string) => {
-  fetch("/api", {
+export const postSearchedLocation = async(item: string) => {
+  await fetch("/api", {
     method: "POST",
     body: JSON.stringify({ location: item, date: new Date() }),
     headers: {
@@ -14,11 +14,11 @@ export const postLocation = (item: string) => {
     .catch((error) => console.log(error));
 };
 
-export const postCurrentWeather = (
+export const postSearchedCurrentWeather = async(
   name: string | undefined,
   weather: WeatherProps
 ) => {
-  fetch("/api/current", {
+  await fetch("/api/current", {
     method: "POST",
     body: JSON.stringify({
       name: name,

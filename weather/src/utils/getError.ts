@@ -5,5 +5,5 @@ export const getError = (error: any): string => {
   if (error instanceof Error) {
     return error.message;
   }
-  return "Error has occured!";
+  return "An error has occured!";
 };

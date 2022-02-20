@@ -6,7 +6,11 @@ import { LocationProps } from "../../../utils/types";
 
 export interface LocationListProps {
   dispatch: React.Dispatch<Action>;
-  onLocationWeather: (id: number, urlType: string, name?: string) => Promise<void>;
+  onLocationWeather: (
+    id: number,
+    urlType: string,
+    name?: string
+  ) => Promise<void>;
   data: LocationProps;
 }
 

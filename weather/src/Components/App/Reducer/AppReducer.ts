@@ -36,8 +36,8 @@ export interface InitialState {
 
 export const defaultState: InitialState = {
   searchLocation: "",
-  locationListPageNumber: 1,
   error: "",
+  locationListPageNumber: 1,
   loading: false,
   showCurrentWeather: false,
   showLocationList: false,

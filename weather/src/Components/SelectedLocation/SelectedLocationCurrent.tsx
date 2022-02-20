@@ -14,21 +14,26 @@ const SelectedLocationCurrent: FC<SelectedLocationProps> = ({
   if (state.currentWeather.length === 0) return null;
 
   return (
-    <ul className="selectedList_cont current_weather">
-      <li>{state.currentWeather[0].temperature} Celsius</li>
-      <li>cloudiness: {state.currentWeather[0].cloudiness},</li>
-      <li>humidity: {state.currentWeather[0].relHumidity},</li>
-      <li>windSpeed: {state.currentWeather[0].windSpeed} m/s,</li>
-      <li>UV index: {state.currentWeather[0].uvIndex}</li>
+    <div className="selectedList_cont">
+      <ul className="current_weather">
+        {Object.entries(state.currentWeather[0]).map(([key, value], index) => {
+          return (
+            <li key={index}>
+              <span className="description">{key}:</span> {value}
+            </li>
+          );
+        })}
+      </ul>
       <button
         className="btn"
         onClick={() => {
           dispatch({ type: "showCurrentWeather", value: false });
           dispatch({ type: "showLocationList", value: true });
         }}
-      >Close
+      >
+        Close
       </button>
-    </ul>
+    </div>
   );
 };
 

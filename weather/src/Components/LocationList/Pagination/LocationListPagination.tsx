@@ -13,7 +13,11 @@ interface LocationListPaginationProps {
   pageNumber: number;
   data: LocationProps[];
   dispatch: React.Dispatch<Action>;
-  handleLocationWeather: (id: number, urlType: string, name?: string) => Promise<void>;
+  handleLocationWeather: (
+    id: number,
+    urlType: string,
+    name?: string
+  ) => Promise<void>;
 }
 
 export const LocationListPagination: FC<LocationListPaginationProps> = ({

@@ -24,7 +24,7 @@ const Input: FC<InputProps> = ({ onLocation, state, dispatch }) => {
         }
         required
       />
-      <ErrorBlock word={state.error} />
+      <ErrorBlock error={state.error} />
       <button className="btn" type="submit">
         Get location
       </button>

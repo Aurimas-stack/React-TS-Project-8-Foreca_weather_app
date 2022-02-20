@@ -12,18 +12,18 @@ app.get("/api", (req, res) => {
 
 app.post("/api", (req, res) => {
   if (!req.body) return res.sendStatus(400);
+
   console.log({ "Searched location": req.body.location, date: req.body.date });
-  res.json("Success!");
 });
 
 app.post("/api/current", (req, res) => {
   if (!req.body) return res.sendStatus(400);
+
   console.log({
     name: req.body.name,
     weather: req.body.currentWeather,
     date: req.body.date,
   });
-  res.json("Success!");
 });
 
 app.listen(PORT, () => {
