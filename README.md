@@ -15,6 +15,7 @@
 * All of the searched strings are displayed to the terminal console with string & timestamp, using `express`.
 * While data is being fetched, a spinning element is displayed:
     - Once data is fetched or if there wasn't a location found, element is hidden.
+    - If there wasn't a location found, error is displayed.
 * For app state `userReducer` is used to store different types of data.
 * Once is data is fetched, a list of places are displayed:
     - List is rendered by `custom pagination component`.
