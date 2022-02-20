@@ -1,5 +1,5 @@
 const mainUrl: string = "https://foreca-weather.p.rapidapi.com/";
-const apiKey: string = "c745030bd5msh840be0eeb1d3a7dp161562jsn29910ef0bba7";
+const apiKey: string = ""; //API KEY GOES HERE
 
 export const locationFetch = (search: string): Promise<Response> => {
   const response: Promise<Response> = fetch(
